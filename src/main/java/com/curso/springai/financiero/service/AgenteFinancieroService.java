@@ -4,6 +4,7 @@ import java.text.Normalizer;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.regex.Pattern;
 
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.memory.ChatMemory;
@@ -38,6 +39,8 @@ public class AgenteFinancieroService {
 			5. Termina SIEMPRE con la pregunta: "¿Quiere comprar, vender o mantener?"
 			""";
 
+	private static final Pattern SIMBOLO_VALIDO = Pattern.compile("^[A-Z]{1,5}(\\.[A-Z])?$");
+
 	private final Map<String, String> ultimaAccionAnalizada = new ConcurrentHashMap<>();
 
 	private final ChatClient chatClient;
@@ -61,6 +64,9 @@ public class AgenteFinancieroService {
 			return "Indica el símbolo de la acción que quieres analizar, por ejemplo AAPL.";
 		}
 		String simbolo = accion.trim().toUpperCase();
+		if (!SIMBOLO_VALIDO.matcher(simbolo).matches()) {
+			return "El símbolo '" + accion.trim() + "' no es válido. Usa entre 1 y 5 letras, por ejemplo AAPL.";
+		}
 		String respuesta = preguntar("Analiza la acción " + simbolo, conversationId);
 		ultimaAccionAnalizada.put(conversationId, simbolo);
 		return respuesta;
