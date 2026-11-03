@@ -10,7 +10,7 @@ En este proyecto se trata de desarrollar un agente financiero. La aplicación co
 Implementado con Spring Boot + Spring AI + Ollama. Las operaciones se guardan **en memoria** y se pierden al reiniciar.
 
 - **Precios:** simulados (`SimuladorPrecioProvider`). Para un mismo símbolo y semana devuelve siempre la misma serie de 6 cierres diarios.
-- **Tools del agente:** `precioAccion`, `tendenciaAccion` (SUBIENDO / BAJANDO) y `registrarOperacion`.
+- **Tools:** `precioAccion` y `tendenciaAccion` (SUBIENDO / BAJANDO) las usa el LLM; `registrarOperacion` la invoca el servicio tras validar la respuesta del usuario.
 - **Memoria de conversación:** en RAM, identificada por la sesión HTTP (cookie `JSESSIONID`).
 - **Registro:** `OperacionRepository` (interfaz) con implementación en memoria (`operacion`, `simbolo_accion`, `precio`, `fecha`).
 
