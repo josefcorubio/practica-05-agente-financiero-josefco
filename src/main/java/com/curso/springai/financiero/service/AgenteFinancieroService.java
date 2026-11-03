@@ -4,10 +4,9 @@ import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.stereotype.Service;
 
-// TODO siguiente iteración: tools
-// import com.curso.springai.financiero.tools.PrecioAccionTool;
-// import com.curso.springai.financiero.tools.RegistrarOperacionTool;
-// import com.curso.springai.financiero.tools.TendenciaTool;
+import com.curso.springai.financiero.tools.PrecioAccionTool;
+import com.curso.springai.financiero.tools.RegistrarOperacionTool;
+import com.curso.springai.financiero.tools.TendenciaTool;
 
 @Service
 public class AgenteFinancieroService {
@@ -36,17 +35,16 @@ public class AgenteFinancieroService {
 			""";
 
 	private final ChatClient chatClient;
-	// private final PrecioAccionTool precioAccionTool;
-	// private final TendenciaTool tendenciaTool;
-	// private final RegistrarOperacionTool registrarOperacionTool;
+	private final PrecioAccionTool precioAccionTool;
+	private final TendenciaTool tendenciaTool;
+	private final RegistrarOperacionTool registrarOperacionTool;
 
-	public AgenteFinancieroService(ChatClient chatClient
-			// , PrecioAccionTool precioAccionTool, TendenciaTool tendenciaTool, RegistrarOperacionTool registrarOperacionTool
-			) {
+	public AgenteFinancieroService(ChatClient chatClient, PrecioAccionTool precioAccionTool,
+			TendenciaTool tendenciaTool, RegistrarOperacionTool registrarOperacionTool) {
 		this.chatClient = chatClient;
-		// this.precioAccionTool = precioAccionTool;
-		// this.tendenciaTool = tendenciaTool;
-		// this.registrarOperacionTool = registrarOperacionTool;
+		this.precioAccionTool = precioAccionTool;
+		this.tendenciaTool = tendenciaTool;
+		this.registrarOperacionTool = registrarOperacionTool;
 	}
 
 	public String analizar(String accion, String conversationId) {
@@ -61,7 +59,7 @@ public class AgenteFinancieroService {
 		return chatClient.prompt()
 				.system(SYSTEM)
 				.user(mensajeUsuario)
-				// .tools(precioAccionTool, tendenciaTool, registrarOperacionTool)
+				.tools(precioAccionTool, tendenciaTool, registrarOperacionTool)
 				.advisors(a -> a.param(ChatMemory.CONVERSATION_ID, conversationId))
 				.call()
 				.content();
