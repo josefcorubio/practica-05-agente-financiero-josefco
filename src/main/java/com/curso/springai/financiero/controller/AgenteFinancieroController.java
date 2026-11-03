@@ -25,13 +25,13 @@ public class AgenteFinancieroController {
 
 	/** Paso 1: precio, estado y recomendación de la acción. Ej: /agente/analizar?accion=AAPL */
 	@GetMapping("analizar")
-	public ResponseEntity<String> analizar(@RequestParam String accion, HttpSession sesion) {
+	public ResponseEntity<String> analizar(@RequestParam("accion") String accion, HttpSession sesion) {
 		return ResponseEntity.ok(agenteService.analizar(accion, sesion.getId()));
 	}
 
 	/** Paso 2: decisión del usuario sobre la acción analizada. Ej: /agente/operar?respuesta=comprar */
 	@GetMapping("operar")
-	public ResponseEntity<String> operar(@RequestParam String respuesta, HttpSession sesion) {
+	public ResponseEntity<String> operar(@RequestParam("respuesta") String respuesta, HttpSession sesion) {
 		return ResponseEntity.ok(agenteService.operar(respuesta, sesion.getId()));
 	}
 
