@@ -1,9 +1,13 @@
 package com.curso.springai.financiero.service;
 
+import java.util.List;
+
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.stereotype.Service;
 
+import com.curso.springai.financiero.model.Operacion;
+import com.curso.springai.financiero.repository.OperacionRepository;
 import com.curso.springai.financiero.tools.PrecioAccionTool;
 import com.curso.springai.financiero.tools.RegistrarOperacionTool;
 import com.curso.springai.financiero.tools.TendenciaTool;
@@ -38,13 +42,16 @@ public class AgenteFinancieroService {
 	private final PrecioAccionTool precioAccionTool;
 	private final TendenciaTool tendenciaTool;
 	private final RegistrarOperacionTool registrarOperacionTool;
+	private final OperacionRepository operacionRepository;
 
 	public AgenteFinancieroService(ChatClient chatClient, PrecioAccionTool precioAccionTool,
-			TendenciaTool tendenciaTool, RegistrarOperacionTool registrarOperacionTool) {
+			TendenciaTool tendenciaTool, RegistrarOperacionTool registrarOperacionTool,
+			OperacionRepository operacionRepository) {
 		this.chatClient = chatClient;
 		this.precioAccionTool = precioAccionTool;
 		this.tendenciaTool = tendenciaTool;
 		this.registrarOperacionTool = registrarOperacionTool;
+		this.operacionRepository = operacionRepository;
 	}
 
 	public String analizar(String accion, String conversationId) {
@@ -53,6 +60,10 @@ public class AgenteFinancieroService {
 
 	public String operar(String respuestaUsuario, String conversationId) {
 		return preguntar("Respuesta del usuario: " + respuestaUsuario, conversationId);
+	}
+
+	public List<Operacion> operacionesRegistradas() {
+		return operacionRepository.listar();
 	}
 
 	private String preguntar(String mensajeUsuario, String conversationId) {
